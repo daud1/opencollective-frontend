@@ -7,7 +7,6 @@ import { get } from 'lodash';
 import { isValidEmail, getErrorFromGraphqlException } from '../../lib/utils';
 
 import StyledButton from '../StyledButton';
-import { P } from '../Text';
 import StyledTooltip from '../StyledTooltip';
 import { payExpenseMutation } from './graphql/mutations';
 import StyledSpinner from '../StyledSpinner';
@@ -25,6 +24,7 @@ class MarkExpenseAsPaidBtn extends React.Component {
     mutate: PropTypes.func,
     refetch: PropTypes.func,
     intl: PropTypes.object.isRequired,
+    errorMessage: PropTypes.func,
   };
 
   constructor(props) {
@@ -64,9 +64,13 @@ class MarkExpenseAsPaidBtn extends React.Component {
       unlock();
     } catch (e) {
       const error = getErrorFromGraphqlException(e).message;
-      this.setState({ error, loading: false });
+      this.setState({ error, loading: false }, this.passErrorMessage);
       unlock();
     }
+  }
+
+  passErrorMessage() {
+    this.props.errorMessage(this.state.error);
   }
 
   render() {
@@ -86,6 +90,8 @@ class MarkExpenseAsPaidBtn extends React.Component {
       disabled = true;
       disabledMessage = intl.formatMessage(this.messages.insufficientBalance);
     }
+
+    if (error) this.passErrorMessage;
 
     const button = (
       <StyledButton
@@ -115,11 +121,6 @@ class MarkExpenseAsPaidBtn extends React.Component {
           <StyledTooltip display="grid" content={disabledMessage}>
             {button}
           </StyledTooltip>
-        )}
-        {error && (
-          <P color="red.500" pr={2}>
-            {error}
-          </P>
         )}
       </React.Fragment>
     );
