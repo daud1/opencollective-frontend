@@ -10,7 +10,7 @@ import { isURL } from 'validator';
 import uuid from 'uuid/v4';
 import * as LibTaxes from '@opencollective/taxes';
 
-import { OPENSOURCE_COLLECTIVE_ID, CollectiveType } from '../../lib/constants/collectives';
+import { CollectiveType } from '../../lib/constants/collectives';
 import { AmountTypes } from '../../lib/constants/tiers-types';
 import { VAT_OPTIONS } from '../../lib/constants/vat';
 import { Router } from '../../server/pages';
@@ -739,7 +739,7 @@ class CreateOrderPage extends React.Component {
 
   /* We only support paypal for one time donations to the open source collective for now. */
   hasPaypal() {
-    return this.props.host.id === OPENSOURCE_COLLECTIVE_ID && !get(this.state, 'stepDetails.interval');
+    return get(this.props.host, 'settings.paymentMethods.paypal') && !get(this.state, 'stepDetails.interval');
   }
 
   /* We might have problems with postal code and this should be disablable */
@@ -977,6 +977,7 @@ class CreateOrderPage extends React.Component {
           {isPaypal && step.isLastStep ? (
             <PaypalButtonContainer>
               <PayWithPaypalButton
+                host={this.props.host}
                 totalAmount={this.getTotalAmountWithTaxes()}
                 currency={this.getCurrency()}
                 style={{ size: 'responsive', height: 55 }}
