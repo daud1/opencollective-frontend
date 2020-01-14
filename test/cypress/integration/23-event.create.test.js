@@ -55,7 +55,7 @@ describe('event.create.test.js', () => {
     cy.get('h1[data-cy=collective-title]').contains(updatedTitle);
     // testing delete
     cy.get('a[title=Settings]').click();
-    cy.get('.actions button.delete').click();
+    cy.get('.actions button.delete').click({ force: true });
     cy.get('button.confirmDelete').click();
     cy.get('h1[data-cy=collective-title]').contains(collectiveTitle);
   });
