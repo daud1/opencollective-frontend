@@ -59,6 +59,10 @@ const MenuItem = styled(Link)`
   ${({ selected }) => selected && selectedStyle};
 `;
 
+const MenuDivider = styled.div`
+  margin-top: 34px;
+`;
+
 class EditCollectiveForm extends React.Component {
   static propTypes = {
     collective: PropTypes.object,
@@ -656,16 +660,6 @@ class EditCollectiveForm extends React.Component {
                 <FormattedMessage id="conversations" defaultMessage="Conversations" />
               </MenuItem>
             )}
-            {collective.isHost && (
-              <MenuItem
-                selected={this.state.section === 'invoices'}
-                route="editCollective"
-                params={{ slug: collective.slug, section: 'invoices' }}
-                className="MenuItem invoices"
-              >
-                <FormattedMessage id="editCollective.menu.invoicesAndReceipts" defaultMessage="Invoices & Receipts" />
-              </MenuItem>
-            )}
             {this.showEditGoals && (
               <MenuItem
                 selected={this.state.section === 'goals'}
@@ -752,16 +746,6 @@ class EditCollectiveForm extends React.Component {
                 <FormattedMessage id="editCollective.menu.export" defaultMessage="Export" />
               </MenuItem>
             )}
-            {collective.isHost && (
-              <MenuItem
-                selected={this.state.section === 'hostSettings'}
-                route="editCollective"
-                params={{ slug: collective.slug, section: 'hostSettings' }}
-                className="MenuItem host"
-              >
-                <FormattedMessage id="editCollective.menu.hostSettings" defaultMessage="Host Settings" />
-              </MenuItem>
-            )}
             <MenuItem
               selected={this.state.section === 'advanced'}
               route="editCollective"
@@ -770,6 +754,27 @@ class EditCollectiveForm extends React.Component {
             >
               <FormattedMessage id="editCollective.menu.advanced" defaultMessage="Advanced" />
             </MenuItem>
+            {collective.isHost && (
+              <React.Fragment>
+                <MenuDivider />
+                <MenuItem
+                  selected={this.state.section === 'hostSettings'}
+                  route="editCollective"
+                  params={{ slug: collective.slug, section: 'hostSettings' }}
+                  className="MenuItem host"
+                >
+                  <FormattedMessage id="editCollective.menu.hostSettings" defaultMessage="Host Settings" />
+                </MenuItem>
+                <MenuItem
+                  selected={this.state.section === 'invoices'}
+                  route="editCollective"
+                  params={{ slug: collective.slug, section: 'invoices' }}
+                  className="MenuItem invoices"
+                >
+                  <FormattedMessage id="editCollective.menu.invoicesAndReceipts" defaultMessage="Invoices & Receipts" />
+                </MenuItem>
+              </React.Fragment>
+            )}
           </Flex>
 
           <Flex flexDirection="column" css={{ flexGrow: 10, flexBasis: 600 }}>
